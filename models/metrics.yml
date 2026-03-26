@@ -1,0 +1,76 @@
+version: 2
+
+metrics:
+
+  # =========================
+  # RATINGS BASE METRICS
+  # =========================
+  - name: total_ratings
+    label: Total Ratings
+    type: simple
+    type_params:
+      measure: total_ratings
+
+  - name: total_rating_value
+    label: Total Rating Value
+    type: simple
+    type_params:
+      measure: total_rating_value
+
+
+  # =========================
+  # RATINGS DERIVED METRICS
+  # =========================
+  - name: average_rating
+    label: Average Rating
+    type: ratio
+    type_params:
+      numerator: total_rating_value
+      denominator: total_ratings
+
+
+  # =========================
+  # USER METRICS
+  # =========================
+  - name: total_users
+    label: Total Users
+    type: simple
+    type_params:
+      measure: user_count
+
+
+  # =========================
+  # MOVIE METRICS
+  # =========================
+  - name: total_movies
+    label: Total Movies
+    type: simple
+    type_params:
+      measure: movie_count
+
+
+  # =========================
+  # GENOME BASE METRICS
+  # =========================
+  - name: total_relevance
+    label: Total Relevance
+    type: simple
+    type_params:
+      measure: total_relevance
+
+  - name: relevance_count
+    label: Relevance Count
+    type: simple
+    type_params:
+      measure: relevance_count
+
+
+  # =========================
+  # GENOME DERIVED METRICS
+  # =========================
+  - name: average_relevance_score
+    label: Average Relevance Score
+    type: ratio
+    type_params:
+      numerator: total_relevance
+      denominator: relevance_count

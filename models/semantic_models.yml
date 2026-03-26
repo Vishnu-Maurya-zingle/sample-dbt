@@ -1,0 +1,151 @@
+version: 2
+
+semantic_models:
+
+  # =========================
+  # RATINGS FACT TABLE
+  # =========================
+  - name: ratings
+    model: ref('fct_ratings')
+
+    entities:
+      - name: rating_id
+        type: primary
+        expr: rating_id   # ensure this column exists
+
+      - name: user
+        type: foreign
+        expr: user_id
+
+      - name: movie
+        type: foreign
+        expr: movie_id
+
+    dimensions:
+      - name: rating_timestamp
+        type: time
+        expr: rating_timestamp
+        type_params:
+          time_granularity: day
+
+      - name: rating_value
+        type: categorical
+        expr: rating
+
+    measures:
+      - name: total_ratings
+        agg: count
+        expr: rating
+        agg_time_dimension: rating_timestamp
+
+      - name: total_rating_value
+        agg: sum
+        expr: rating
+        agg_time_dimension: rating_timestamp
+
+
+  # =========================
+  # MOVIES DIMENSION
+  # =========================
+  - name: movies
+    model: ref('dim_movies')
+
+    entities:
+      - name: movie
+        type: primary
+        expr: movie_id
+
+    dimensions:
+      - name: movie_title
+        type: categorical
+        expr: movie_title
+
+      - name: genres
+        type: categorical
+        expr: genres
+
+      - name: movie_time
+        type: time
+        expr: CURRENT_DATE   # fallback
+
+    measures:
+      - name: movie_count
+        agg: count
+        expr: movie_id
+        agg_time_dimension: movie_time
+
+
+  # =========================
+  # USERS DIMENSION
+  # =========================
+  - name: users
+    model: ref('dim_users')
+
+    entities:
+      - name: user
+        type: primary
+        expr: user_id
+
+    dimensions:
+      - name: user_time
+        type: time
+        expr: CURRENT_DATE   # fallback
+
+    measures:
+      - name: user_count
+        agg: count
+        expr: user_id
+        agg_time_dimension: user_time
+
+
+  # =========================
+  # GENOME SCORES FACT
+  # =========================
+  - name: genome_scores
+    model: ref('fct_genome_scores')
+
+    entities:
+      - name: movie
+        type: primary
+        expr: movie_id
+
+      - name: tag
+        type: foreign
+        expr: tag_id
+
+    dimensions:
+      - name: tag_id
+        type: categorical
+        expr: tag_id
+
+      - name: genome_time
+        type: time
+        expr: CURRENT_DATE   # fallback
+
+    measures:
+      - name: total_relevance
+        agg: sum
+        expr: relevance_score
+        agg_time_dimension: genome_time
+
+      - name: relevance_count
+        agg: count
+        expr: relevance_score
+        agg_time_dimension: genome_time
+
+
+  # =========================
+  # TAGS DIMENSION
+  # =========================
+  - name: tags
+    model: ref('dim_gnome_tags')
+
+    entities:
+      - name: tag
+        type: primary
+        expr: tag_id
+
+    dimensions:
+      - name: tag_name
+        type: categorical
+        expr: tag_name
