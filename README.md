@@ -17,3 +17,4 @@ Try running the following commands:
 # netflix-dbt
 # netflix-dbt
 # netflix-dbt
+# sample-dbt
